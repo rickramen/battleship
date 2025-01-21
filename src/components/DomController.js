@@ -10,7 +10,10 @@ class DomController {
     }
 
     displayAllBoards() {
+        
         this.displayBoard(this.gameController.player1.gameboard, 'player1-board');
+        this.displayBoard(this.gameController.player2.gameboard, 'player2-board');
+    
     }
 
     displayBoard(gameboard, playerBoard) {
