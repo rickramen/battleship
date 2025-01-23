@@ -6,26 +6,24 @@ class DomController {
     }
 
     initialize() {
-        this.displayAllBoards();
+        this.displayPlayerBoards();
     }
 
-    displayAllBoards() {
-        
-        this.displayBoard(this.gameController.player1.gameboard, 'player1-board');
-        this.displayBoard(this.gameController.player2.gameboard, 'player2-board');
-    
+    displayPlayerBoards() {
+        this.renderBoard(this.gameController.player1.gameboard, 'player1-board');
+        this.renderBoard(this.gameController.player2.gameboard, 'player2-board');
     }
 
-    displayBoard(gameboard, playerBoard) {
+    renderBoard(gameboard, playerBoard) {
         const boardElement = document.getElementById(playerBoard);
         boardElement.innerHTML = ''; // Clear before render
 
-        gameboard.grid.forEach((row, x) => {
-            row.forEach((cell, y) => {
+        gameboard.grid.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
                 const cellElement = document.createElement('div');
                 cellElement.classList.add('cell');
-                cellElement.dataset.x = x;
-                cellElement.dataset.y = y;
+                cellElement.dataset.row = rowIndex;
+                cellElement.dataset.col = colIndex;
                 
                 if (cell) {
                     if (cell.isSunk()) {
@@ -38,7 +36,6 @@ class DomController {
                 }
 
                 boardElement.appendChild(cellElement);
-                
             });
         });
     }

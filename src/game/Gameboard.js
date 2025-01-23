@@ -9,12 +9,12 @@ class Gameboard {
         this.missedAttacks = [];
     }
 
-    isValidCoordinate({x, y}) {
-        return x >= 0 && x < this.size && y >= 0 && y < this.size;
+    isValidCoordinate({row, col}) {
+        return row >= 0 && row < this.size && col >= 0 && col < this.size;
     }
 
     isPositionAvailable(coordinates) {
-        return coordinates.every(({x, y}) => this.grid[x][y] === null);
+        return coordinates.every(({row, col}) => this.grid[row][col] === null);
     }
 
     placeShip(ship, coordinates) {
@@ -26,21 +26,21 @@ class Gameboard {
             throw new Error('Invalid ship placement: Position is occupied');
         }
         
-        coordinates.forEach(({x, y}) => {
-            this.grid[x][y] = ship;
+        coordinates.forEach(({row, col}) => {
+            this.grid[row][col] = ship;
         });
     }
 
-    receiveAttack({x, y}) {
-        if (!this.isValidCoordinate({x, y})) {
+    receiveAttack({row, col}) {
+        if (!this.isValidCoordinate({row, col})) {
             throw new Error('Invalid attack: Coordinates out of bounds');
         }
 
-        if (this.grid[x][y]) {
-            this.grid[x][y].hit();
+        if (this.grid[row][col]) {
+            this.grid[row][col].hit();
             return true;  // Hit
         } else {
-            this.missedAttacks.push({x, y});
+            this.missedAttacks.push({row, col});
             return false;  // Miss
         }
     }

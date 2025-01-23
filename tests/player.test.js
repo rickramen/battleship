@@ -18,7 +18,7 @@ describe('Player', () => {
 
     test('should be able to interact with the gameboard', () => {
         const ship = { length: 3, hit: jest.fn(), isSunk: jest.fn() };
-        const coordinates = [{x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 2}];
+        const coordinates = [{row: 0, col: 0}, {row: 0, col: 1}, {row: 0, col: 2}];
         
         player.gameboard.placeShip(ship, coordinates);
 
