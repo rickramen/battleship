@@ -12,6 +12,7 @@ class DomController {
     displayPlayerBoards() {
         this.renderBoard(this.gameController.player1.gameboard, 'player1-board');
         this.renderBoard(this.gameController.player2.gameboard, 'player2-board');
+        this.addEventListeners('player2-board');
     }
 
     renderBoard(gameboard, playerBoard) {
@@ -28,6 +29,7 @@ class DomController {
                 if (cell) {
                     if (cell.isSunk()) {
                         cellElement.classList.add('sunk');
+
                     } else {
                         cellElement.classList.add('ship');
                     }
@@ -39,6 +41,29 @@ class DomController {
             });
         });
     }
+
+    addEventListeners(playerBoard) {
+        const boardElement = document.getElementById(playerBoard); 
+        
+        boardElement.querySelectorAll('.cell').forEach((cellElement) => {
+            const row = parseInt(cellElement.dataset.row, 10);
+            const col = parseInt(cellElement.dataset.col, 10);
+
+            cellElement.addEventListener('click', () => {
+                this.handleAttack(row, col);
+            });
+        });
+    }
+
+    handleAttack(row, col) {
+        const result = this.gameController.attack(row, col);
+
+        if (result) {
+            console.log(result); 
+        }
+        this.displayPlayerBoards();
+    }
+
 }
 
 module.exports = DomController;

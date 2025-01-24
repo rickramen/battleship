@@ -22,3 +22,7 @@
     background-color: gray;
 }
 
+.cell.sunk {
+    background-color: red;
+}
+
