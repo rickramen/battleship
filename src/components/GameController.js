@@ -39,6 +39,12 @@ class GameController {
                 {row: 1, col: 8}, {row: 2, col: 8}
             ] // destroyer
         );
+
+        this.player2.gameboard.placeShip(
+            new Ship(5), [
+                {row: 4, col: 2}, {row: 4, col: 3}, {row: 4, col: 4}, {row: 4, col: 5}, {row: 4, col: 6}
+            ] // carrier
+        );
         this.player2.gameboard.placeShip(
             new Ship(3), [
                 {row: 7, col: 3}, {row: 7, col: 4}, {row: 7, col: 5}
@@ -46,13 +52,23 @@ class GameController {
         );
     }   
 
+    processAttack(row, col) {
+        const result = this.opponent.gameboard.receiveAttack({ row, col });
 
-    attack(row, col) {
-        const targetBoard = this.player2.gameboard;
-          
-        const result = targetBoard.receiveAttack({ row, col });
+        if (result.sunk) {
+            console.log('A ship was sunk!');
+        }
 
-        return result ? 'Hit!' : 'Miss!';
+        if (this.opponent.gameboard.allShipsSunk()) {
+            console.log(`${this.currentPlayer.name} wins!`);
+        }
+
+        //this.swapTurn();
+        return result;
+    }
+
+    swapTurn() {
+        [this.currentPlayer, this.opponent] = [this.opponent, this.currentPlayer];
     }
 }
 

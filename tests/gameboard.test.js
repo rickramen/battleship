@@ -38,8 +38,8 @@ describe('Gameboard', () => {
     describe('Attack Behavior', () => {
         test('should register a miss when attacking an empty spot', () => {
             const result = gameboard.receiveAttack({row: 5, col: 5});
-            expect(result).toBe(false); 
-            expect(gameboard.missedAttacks).toContainEqual({row: 5, col: 5});
+            expect(result.hit).toBe(false); 
+            expect(gameboard.grid[5][5]).toBeNull();
         });
 
         test('should register a hit when attacking a ship', () => {
@@ -47,8 +47,8 @@ describe('Gameboard', () => {
             gameboard.placeShip(ship, coordinates);
 
             const result = gameboard.receiveAttack({row: 0, col: 1});
-            expect(result).toBe(true); 
-            expect(ship.isSunk()).toBe(false); 
+            expect(result.hit).toBe(true); 
+            expect(ship.isHit({ row: 0, col: 1 })).toBe(true);
         });
 
         test('should throw error for invalid attack (out of bounds)', () => {

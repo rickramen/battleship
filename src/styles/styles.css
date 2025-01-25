@@ -1,3 +1,7 @@
+header {
+    text-align: center;
+}
+
 .board-container {
     display: flex;            
     gap: 200px; 
@@ -15,14 +19,26 @@
 .cell {
     width: 30px;
     height: 30px;
-    background-color: lightblue;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+
+.cell.empty {
+    background-color: rgb(167, 213, 243);
 }
 
 .cell.ship {
     background-color: gray;
 }
 
-.cell.sunk {
+.cell.hit {
     background-color: red;
 }
 
+.cell.miss {
+    background-color: blue;
+}
+
+.cell.sunk {
+    background-color: black;
+}

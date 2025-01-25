@@ -1,19 +1,22 @@
 // Ship.js
 
 class Ship {
-    constructor (length) {
+    constructor(length) {
         this.length = length;
-        this.hits = 0;
+        this.hits = [];
     }
 
-    hit() {
-        this.hits += 1;
+    hit(position) {
+        this.hits.push(position); // Track the hit position
+    }
+
+    isHit(position) {
+        return this.hits.some(hit => hit.row === position.row && hit.col === position.col);
     }
 
     isSunk() {
-        return this.hits === this.length;
+        return this.hits.length === this.length; // Sunk if all parts are hit
     }
 }
-
 
 module.exports = Ship;
