@@ -17,16 +17,20 @@ class DomController {
 
     renderBoard(gameboard, playerBoardId) {
         const boardElement = document.getElementById(playerBoardId);
-        boardElement.innerHTML = ''; // Clear before rendering
-
+        boardElement.innerHTML = ''; // Clear the board before re-rendering
+    
         gameboard.grid.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 const cellElement = document.createElement('div');
                 cellElement.classList.add('cell');
                 cellElement.dataset.row = rowIndex;
                 cellElement.dataset.col = colIndex;
-
-                if (cell) {
+    
+                // Check for missed attacks first
+                if (gameboard.missedAttacks.some(miss => miss.row === rowIndex && miss.col === colIndex)) {
+                    cellElement.classList.add('miss');
+                } 
+                else if (cell) {
                     if (cell.isSunk()) {
                         cellElement.classList.add('sunk');
                     } else if (cell.isHit({ row: rowIndex, col: colIndex })) {
@@ -34,15 +38,16 @@ class DomController {
                     } else {
                         cellElement.classList.add('ship');
                     }
-                } else {
+                } 
+                else {
                     cellElement.classList.add('empty');
                 }
-
+    
                 boardElement.appendChild(cellElement);
             });
         });
     }
-
+    
     addEventListeners(playerBoardId) {
         const boardElement = document.getElementById(playerBoardId);
 
@@ -60,36 +65,11 @@ class DomController {
 
     handleAttack(row, col) {
         const result = this.gameController.processAttack(row, col);
-
+    
         if (result) {
-            const boardElement = document.getElementById('player2-board'); // Assume attacking opponent
-            const cellElement = boardElement.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-
-            if (result.hit) {
-                cellElement.classList.add('hit');
-                if (result.sunk) {
-                    this.markSunkShip('player2-board');
-                }
-            } else {
-                cellElement.classList.add('miss');
-            }
+            this.displayPlayerBoards(); 
         }
-    }
-
-    markSunkShip(boardId) {
-        const boardElement = document.getElementById(boardId);
-
-        this.gameController.opponent.gameboard.grid.forEach((row, rowIndex) => {
-            row.forEach((cell, colIndex) => {
-                if (cell && cell.isSunk()) {
-                    const cellElement = boardElement.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex}"]`);
-                    if (cellElement) {
-                        cellElement.classList.add('sunk');
-                    }
-                }
-            });
-        });
-    }
+    }    
 }
 
 module.exports = DomController;

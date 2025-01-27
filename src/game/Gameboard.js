@@ -6,6 +6,7 @@ class Gameboard {
     constructor(size = 10) {
         this.size = size;
         this.grid = Array.from({ length: size }, () => Array(size).fill(null));
+        this.missedAttacks = [];
     }
 
     isValidCoordinate({ row, col }) {
@@ -45,6 +46,9 @@ class Gameboard {
             target.hit({ row, col });
             return { hit: true, row, col, sunk: target.isSunk() };
         } else {
+            if (!this.missedAttacks.some(miss => miss.row === row && miss.col === col)) {
+                this.missedAttacks.push({ row, col }); 
+            }
             return { hit: false, row, col };
         }
     }
