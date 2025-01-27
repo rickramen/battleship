@@ -36,7 +36,7 @@ header {
 }
 
 .cell.miss {
-    background-color: blue;
+    background-color: rgb(84, 157, 206);
 }
 
 .cell.sunk {

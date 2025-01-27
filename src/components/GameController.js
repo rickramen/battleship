@@ -56,23 +56,28 @@ class GameController {
 
     processAttack(row, col) {
         const result = this.opponent.gameboard.receiveAttack({ row, col });
-
+    
         if (result.sunk) {
             console.log('A ship was sunk!');
         }
-
+    
+        // Check if the opponent has lost all ships
         if (this.opponent.gameboard.allShipsSunk()) {
-            console.log(`${this.currentPlayer.name} wins!`);
+            this.declareWinner(this.currentPlayer);
+            return { ...result, gameEnded: true }; 
         }
-
+    
         this.swapTurn();
         return result;
     }
-
+    
+    declareWinner(winner) {
+        this.winner = winner;
+        this.gameEnded = true; 
+    }
+    
     swapTurn() {
         [this.currentPlayer, this.opponent] = [this.opponent, this.currentPlayer];
-
-        console.log(`After Swap, Current Player: ${this.currentPlayer.type}`);
 
         if (this.currentPlayer.type === 'computer') {
             console.log('Computer is making its move...');

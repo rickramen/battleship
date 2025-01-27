@@ -17,6 +17,8 @@ class DomController {
 
     renderBoard(gameboard, playerBoardId) {
         const boardElement = document.getElementById(playerBoardId);
+        const isComputerBoard = playerBoardId === 'player2-board';
+
         boardElement.innerHTML = ''; // Clear the board before re-rendering
     
         gameboard.grid.forEach((row, rowIndex) => {
@@ -27,7 +29,7 @@ class DomController {
                 cellElement.dataset.col = colIndex;
     
                 // Check for missed attacks first
-                if (gameboard.missedAttacks.some(miss => miss.row === rowIndex && miss.col === colIndex)) {
+                if (gameboard.missedAttacks.some(miss => miss.row === rowIndex && miss.col === colIndex)) { 
                     cellElement.classList.add('miss');
                 } 
                 else if (cell) {
@@ -36,8 +38,12 @@ class DomController {
                     } else if (cell.isHit({ row: rowIndex, col: colIndex })) {
                         cellElement.classList.add('hit');
                     } else {
+                    if (isComputerBoard) {
+                        //cellElement.classList.add('empty');
+                    } else {
                         cellElement.classList.add('ship');
                     }
+                }
                 } 
                 else {
                     cellElement.classList.add('empty');
@@ -56,21 +62,42 @@ class DomController {
             const col = parseInt(cellElement.dataset.col, 10);
 
             cellElement.addEventListener('click', () => {
-                if (!cellElement.classList.contains('hit') && !cellElement.classList.contains('miss')) {
-                    this.handleAttack(row, col);
-                }
+                if (
+                !cellElement.classList.contains('hit') && 
+                !cellElement.classList.contains('miss') && 
+                !cellElement.classList.contains('sunk')
+                ) { this.handleAttack(row, col); }
             });
         });
     }
 
-handleAttack(row, col) {
+    handleAttack(row, col) {
         const result = this.gameController.processAttack(row, col);
     
         if (result) {
-            this.displayPlayerBoards(); 
+            this.displayPlayerBoards();
+    
+            // Check if the game has ended and display winner
+            if (result.gameEnded) {
+                this.displayWinner(this.gameController.winner);
+            }
         }
-    }    
-}    
+    }
+
+    displayWinner(winner) {
+        const winnerMessage = document.createElement('div');
+        winnerMessage.id = 'winner-message';
+
+        if (winner.type === 'real'){
+            winnerMessage.textContent = `YOU WIN!`;
+        }else (winnerMessage.textContent = `COMPUTER WINS!`);
+        
+        document.body.appendChild(winnerMessage);
+
+        // Disable UI interaction
+        document.getElementById('player2-board').style.pointerEvents = 'none';
+    }
+}
 
 module.exports = DomController;
 
