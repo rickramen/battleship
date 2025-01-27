@@ -2,6 +2,7 @@
 const Player = require('../game/Player');
 const Ship = require('../game/Ship');
 const ComputerController = require('./ComputerController');
+const ShipGenerator = require('./ShipGenerator');
 
 class GameController {
     constructor() {
@@ -10,48 +11,27 @@ class GameController {
         this.currentPlayer = this.player1;
         this.opponent = this.player2;
 
+        this.player1ShipGenerator = new ShipGenerator(this.player1.gameboard);
+        this.player2ShipGenerator = new ShipGenerator(this.player2.gameboard);
         this.populateBoards();
+
         this.computerController = new ComputerController(this);
     }
 
     populateBoards() {
-        // Add randomization later
-        this.player1.gameboard.placeShip(
-            new Ship(5), [
-                {row: 4, col: 2}, {row: 4, col: 3}, {row: 4, col: 4}, {row: 4, col: 5}, {row: 4, col: 6}
-            ] // carrier
-        );
-        this.player1.gameboard.placeShip(
-            new Ship(4), [
-                {row: 6, col: 1}, {row: 7, col: 1}, {row: 8, col: 1}, {row: 9, col: 1}
-            ] // battleship
-            );
-        this.player1.gameboard.placeShip(
-            new Ship(3), [
-                {row: 0, col: 0}, {row: 0, col: 1}, {row: 0, col: 2}
-            ] // cruiser
-        );
-        this.player1.gameboard.placeShip(
-            new Ship(3), [
-                {row: 6, col: 6}, {row: 7, col: 6}, {row: 8, col: 6}
-            ] // submarine
-        );
-        this.player1.gameboard.placeShip(
-            new Ship(2), [
-                {row: 1, col: 8}, {row: 2, col: 8}
-            ] // destroyer
-        );
+        // Player 1
+        this.player1ShipGenerator.placeShipRandomly(new Ship(5));
+        this.player1ShipGenerator.placeShipRandomly(new Ship(4));
+        this.player1ShipGenerator.placeShipRandomly(new Ship(3));
+        this.player1ShipGenerator.placeShipRandomly(new Ship(3));
+        this.player1ShipGenerator.placeShipRandomly(new Ship(2));
 
-        this.player2.gameboard.placeShip(
-            new Ship(5), [
-                {row: 4, col: 2}, {row: 4, col: 3}, {row: 4, col: 4}, {row: 4, col: 5}, {row: 4, col: 6}
-            ] // carrier
-        );
-        this.player2.gameboard.placeShip(
-            new Ship(3), [
-                {row: 7, col: 3}, {row: 7, col: 4}, {row: 7, col: 5}
-            ]
-        );
+        // Player 2
+        this.player2ShipGenerator.placeShipRandomly(new Ship(5));
+        this.player2ShipGenerator.placeShipRandomly(new Ship(4));
+        this.player2ShipGenerator.placeShipRandomly(new Ship(3));
+        this.player2ShipGenerator.placeShipRandomly(new Ship(3));
+        this.player2ShipGenerator.placeShipRandomly(new Ship(2));
     }   
 
     processAttack(row, col) {
