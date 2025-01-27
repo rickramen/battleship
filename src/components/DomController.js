@@ -63,14 +63,14 @@ class DomController {
         });
     }
 
-    handleAttack(row, col) {
+handleAttack(row, col) {
         const result = this.gameController.processAttack(row, col);
     
         if (result) {
             this.displayPlayerBoards(); 
         }
     }    
-}
+}    
 
 module.exports = DomController;
 

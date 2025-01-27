@@ -1,6 +1,7 @@
 // GameController.js
 const Player = require('../game/Player');
 const Ship = require('../game/Ship');
+const ComputerController = require('./ComputerController');
 
 class GameController {
     constructor() {
@@ -10,6 +11,7 @@ class GameController {
         this.opponent = this.player2;
 
         this.populateBoards();
+        this.computerController = new ComputerController(this);
     }
 
     populateBoards() {
@@ -63,12 +65,19 @@ class GameController {
             console.log(`${this.currentPlayer.name} wins!`);
         }
 
-        //this.swapTurn();
+        this.swapTurn();
         return result;
     }
 
     swapTurn() {
         [this.currentPlayer, this.opponent] = [this.opponent, this.currentPlayer];
+
+        console.log(`After Swap, Current Player: ${this.currentPlayer.type}`);
+
+        if (this.currentPlayer.type === 'computer') {
+            console.log('Computer is making its move...');
+            this.computerController.takeTurn(); 
+        }
     }
 }
 
