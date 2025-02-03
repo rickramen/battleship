@@ -20,6 +20,8 @@ class GameController {
 
     populateBoards() {
         // Player 1
+        this.player1.gameboard.resetGameBoard();
+
         this.player1ShipGenerator.placeShipRandomly(new Ship(5));
         this.player1ShipGenerator.placeShipRandomly(new Ship(4));
         this.player1ShipGenerator.placeShipRandomly(new Ship(3));
@@ -27,6 +29,8 @@ class GameController {
         this.player1ShipGenerator.placeShipRandomly(new Ship(2));
 
         // Player 2
+        this.player2.gameboard.resetGameBoard();
+
         this.player2ShipGenerator.placeShipRandomly(new Ship(5));
         this.player2ShipGenerator.placeShipRandomly(new Ship(4));
         this.player2ShipGenerator.placeShipRandomly(new Ship(3));

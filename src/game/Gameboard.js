@@ -56,6 +56,10 @@ class Gameboard {
     allShipsSunk() {
         return this.grid.flat().every(cell => !cell || cell.isSunk());
     }
+
+    resetGameBoard() {
+        this.grid = Array.from({ length: this.size }, () => Array(this.size).fill(null));
+    }
 }
 
 module.exports = Gameboard;

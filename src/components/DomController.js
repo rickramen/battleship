@@ -7,12 +7,13 @@ class DomController {
 
     initialize() {
         this.displayPlayerBoards();
+        this.setupButtonListeners();
     }
 
     displayPlayerBoards() {
         this.renderBoard(this.gameController.player1.gameboard, 'player1-board');
         this.renderBoard(this.gameController.player2.gameboard, 'player2-board');
-        this.addEventListeners('player2-board');
+        this.setupBoardListeners('player2-board');
     }
 
     renderBoard(gameboard, playerBoardId) {
@@ -39,7 +40,7 @@ class DomController {
                         cellElement.classList.add('hit');
                     } else {
                     if (isComputerBoard) {
-                        //cellElement.classList.add('empty');
+                        cellElement.classList.add('empty');
                     } else {
                         cellElement.classList.add('ship');
                     }
@@ -54,7 +55,15 @@ class DomController {
         });
     }
     
-    addEventListeners(playerBoardId) {
+    setupButtonListeners() {
+        document.getElementById("random-btn").addEventListener("click", () => {
+            this.gameController.populateBoards(); 
+            this.displayPlayerBoards()
+            console.log('randomized');
+        });
+       }
+
+    setupBoardListeners(playerBoardId) {
         const boardElement = document.getElementById(playerBoardId);
 
         boardElement.querySelectorAll('.cell').forEach((cellElement) => {
@@ -71,7 +80,7 @@ class DomController {
         });
     }
 
-    handleAttack(row, col) {
+      handleAttack(row, col) {
         const result = this.gameController.processAttack(row, col);
     
         if (result) {
