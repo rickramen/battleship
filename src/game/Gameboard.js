@@ -57,8 +57,9 @@ class Gameboard {
         return this.grid.flat().every(cell => !cell || cell.isSunk());
     }
 
-    resetGameBoard() {
+    clearBoard() {
         this.grid = Array.from({ length: this.size }, () => Array(this.size).fill(null));
+        this.missedAttacks = [];
     }
 }
 

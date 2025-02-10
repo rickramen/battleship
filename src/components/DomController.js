@@ -57,9 +57,8 @@ class DomController {
     
     setupButtonListeners() {
         document.getElementById("random-btn").addEventListener("click", () => {
-            this.gameController.populateBoards(); 
+            this.gameController.resetBoards(); 
             this.displayPlayerBoards()
-            console.log('randomized');
         });
        }
 

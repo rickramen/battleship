@@ -1,5 +1,40 @@
+body {
+    background-color: rgb(28, 84, 156);
+}
+
 header {
     text-align: center;
+    color: white;
+}
+
+h2{
+    text-align: center;
+    color: white;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
 .board-container {
@@ -19,16 +54,16 @@ header {
 .cell {
     width: 30px;
     height: 30px;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     display: inline-block;
 }
 
 .cell.empty {
-    background-color: rgb(167, 213, 243);
+    background-color: rgb(102, 212, 240);
 }
 
 .cell.ship {
-    background-color: gray;
+    background-color: rgb(87, 85, 85);
 }
 
 .cell.hit {
@@ -36,7 +71,7 @@ header {
 }
 
 .cell.miss {
-    background-color: rgb(84, 157, 206);
+    background-color: rgb(255, 255, 255);
 }
 
 .cell.sunk {
