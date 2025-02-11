@@ -8,6 +8,7 @@ class DomController {
     initialize() {
         this.displayPlayerBoards();
         this.setupButtonListeners();
+        this.updateGameStatus('Press start to BATTLE!!!');
     }
 
     displayPlayerBoards() {
@@ -60,6 +61,13 @@ class DomController {
             this.gameController.resetBoards(); 
             this.displayPlayerBoards()
         });
+
+        document.getElementById("start-btn").addEventListener("click", () => {
+            document.getElementById("player1-board").classList.remove("disabled");
+            document.getElementById("player2-board").classList.remove("disabled");
+            document.getElementById("player1-board").classList.add("started");
+            document.getElementById("player2-board").classList.add("started");
+        });
        }
 
     setupBoardListeners(playerBoardId) {
@@ -71,6 +79,7 @@ class DomController {
 
             cellElement.addEventListener('click', () => {
                 if (
+                boardElement.classList.contains('started') &&    
                 !cellElement.classList.contains('hit') && 
                 !cellElement.classList.contains('miss') && 
                 !cellElement.classList.contains('sunk')
@@ -84,26 +93,27 @@ class DomController {
     
         if (result) {
             this.displayPlayerBoards();
-    
             // Check if the game has ended and display winner
             if (result.gameEnded) {
                 this.displayWinner(this.gameController.winner);
+                document.getElementById("player1-board").classList.remove("started");
+                document.getElementById("player2-board").classList.remove("started");
             }
         }
     }
+    updateGameStatus(message) {
+        const gameStatusElement = document.getElementById('game-status');
+        gameStatusElement.textContent = message;
+    }
 
     displayWinner(winner) {
-        const winnerMessage = document.createElement('div');
-        winnerMessage.id = 'winner-message';
+        const gameStatusElement = document.getElementById('game-status');
 
         if (winner.type === 'real'){
-            winnerMessage.textContent = `YOU WIN!`;
-        }else (winnerMessage.textContent = `COMPUTER WINS!`);
-        
-        document.body.appendChild(winnerMessage);
-
-        // Disable UI interaction
-        document.getElementById('player2-board').style.pointerEvents = 'none';
+            gameStatusElement.textContent = `YOU WIN!`;
+        }else {
+            gameStatusElement.textContent = `COMPUTER WINS!`;
+        };
     }
 }
 

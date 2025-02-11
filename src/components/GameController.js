@@ -19,19 +19,13 @@ class GameController {
     }
 
     populateBoards() {
-        // Player 1
-        this.player1ShipGenerator.placeShipRandomly(new Ship(5));
-        this.player1ShipGenerator.placeShipRandomly(new Ship(4));
-        this.player1ShipGenerator.placeShipRandomly(new Ship(3));
-        this.player1ShipGenerator.placeShipRandomly(new Ship(3));
-        this.player1ShipGenerator.placeShipRandomly(new Ship(2));
-
-        // Player 2
-        this.player2ShipGenerator.placeShipRandomly(new Ship(5));
-        this.player2ShipGenerator.placeShipRandomly(new Ship(4));
-        this.player2ShipGenerator.placeShipRandomly(new Ship(3));
-        this.player2ShipGenerator.placeShipRandomly(new Ship(3));
-        this.player2ShipGenerator.placeShipRandomly(new Ship(2));
+        const ships = [5, 4, 3, 3, 2];
+        ships.forEach(length => {
+            // Player 1
+            this.player1ShipGenerator.placeShipRandomly(new Ship(length));
+            // Player 2
+            this.player2ShipGenerator.placeShipRandomly(new Ship(length));
+        });
     }   
 
     resetBoards() {
@@ -48,8 +42,7 @@ class GameController {
         }
     
         // Check if the opponent has lost all ships
-        if (this.opponent.gameboard.allShipsSunk()) {
-            this.declareWinner(this.currentPlayer);
+        if (this.checkForWinner()) {
             return { ...result, gameEnded: true }; 
         }
     
@@ -57,6 +50,14 @@ class GameController {
         return result;
     }
     
+    checkForWinner() {
+        if (this.opponent.gameboard.allShipsSunk()) {
+            this.declareWinner(this.currentPlayer);
+            return true;
+        }
+        return false;
+    }
+
     declareWinner(winner) {
         this.winner = winner;
         this.gameEnded = true; 

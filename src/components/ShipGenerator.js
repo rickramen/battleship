@@ -67,6 +67,8 @@ class ShipGenerator {
 
         if (validPositionFound) {
             this.placeShipOnBoard(ship, position, direction);
+        }else {
+            throw new Error(`Failed to place ship after ${attempts} attempts`);
         }
     }
 }
