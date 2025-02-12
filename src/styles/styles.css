@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(28, 84, 156);
+    background-color: rgb(3, 51, 112);
 }
 
 header {
@@ -21,6 +21,7 @@ main {
 button {
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
+    width: 150px;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
@@ -53,7 +54,7 @@ button {
 
 .board.disabled {
     pointer-events: none;
-    opacity: 0.75;
+    opacity: 0.5;
 }
 
 .cell {
@@ -64,7 +65,7 @@ button {
 }
 
 .cell.empty {
-    background-color: rgb(102, 212, 240);
+    background-color: rgb(99, 205, 231);
 }
 
 .cell.ship {

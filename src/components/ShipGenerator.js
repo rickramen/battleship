@@ -11,32 +11,47 @@ class ShipGenerator {
         return { row, col };
     }
 
+    // Return either horizontal or vertical orientation 
     getRandomDirection() {
         return Math.random() < 0.5 ? 'horizontal' : 'vertical';  
     }
 
+    getAvailablePositions(ship, direction) {
+        const positions = [];
+        const size = this.gameboard.size;
+
+        // Loop through all the rows and columns to find valid starting positions
+        for (let row = 0; row < size; row++) {
+            for (let col = 0; col < size; col++) {
+                if (this.isValidShipPlacement(ship, { row, col }, direction)) {
+                    positions.push({ row, col });
+                }
+            }
+        }
+
+        // Shuffle the valid positions to randomize the placement
+        return this.shufflePositions(positions);
+    }
+
+    
     isValidShipPlacement(ship, startPos, direction) {
         const { row, col } = startPos;
-    
-        // Check for out of bounds
-        if (direction === 'horizontal' && col + ship.length > this.gameboard.size) {
-            return false; 
-        }
-        if (direction === 'vertical' && row + ship.length > this.gameboard.size) {
-            return false; 
-        }
-    
-        // Check for overlapping ships
+
+        // Check if the ship is within the bounds of the gameboard
+        if (direction === 'horizontal' && col + ship.length > this.gameboard.size) return false;
+        if (direction === 'vertical' && row + ship.length > this.gameboard.size) return false;
+
+        // Check if the ship overlaps with any other ships
         for (let i = 0; i < ship.length; i++) {
             const r = direction === 'vertical' ? row + i : row;
             const c = direction === 'horizontal' ? col + i : col;
-    
-            if (r < 0 || c < 0 || r >= this.gameboard.size || c >= this.gameboard.size || this.gameboard.grid[r][c]) {
-                return false;  // If out of bounds or overlap found
-            }
+
+            // Check if the grid cell is already occupied
+            if (this.gameboard.grid[r][c]) return false; 
         }
-    
-        return true;
+
+        // Return true if the ship placement is valid
+        return true; 
     }
 
     placeShipOnBoard(ship, startPos, direction) {
@@ -51,25 +66,24 @@ class ShipGenerator {
     }
 
     placeShipRandomly(ship) {
-        let validPositionFound = false;
-        let position;
-        let direction;
+        const direction = this.getRandomDirection();
+        let availablePositions = this.getAvailablePositions(ship, direction);
 
-        // Limit to 100 attempts
-        let attempts = 0;
-        while (!validPositionFound && attempts < 100) {
-            position = this.getRandomPosition();  
-            direction = this.getRandomDirection(); 
-
-            validPositionFound = this.isValidShipPlacement(ship, position, direction);
-            attempts++;
+        if (availablePositions.length === 0) {
+            throw new Error(`No valid positions found for ship of length ${ship.length}`);
         }
 
-        if (validPositionFound) {
-            this.placeShipOnBoard(ship, position, direction);
-        }else {
-            throw new Error(`Failed to place ship after ${attempts} attempts`);
+        // Place the ship on board with the random position and direction
+        const position = availablePositions[0]; 
+        this.placeShipOnBoard(ship, position, direction);
+    }
+
+    shufflePositions(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
     }
 }
 

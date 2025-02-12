@@ -8,13 +8,18 @@ class DomController {
     initialize() {
         this.displayPlayerBoards();
         this.setupButtonListeners();
-        this.updateGameStatus('Press start to BATTLE!!!');
+        this.updateGameStatusMessage('Press start to BATTLE!!!');
     }
 
     displayPlayerBoards() {
         this.renderBoard(this.gameController.player1.gameboard, 'player1-board');
         this.renderBoard(this.gameController.player2.gameboard, 'player2-board');
         this.setupBoardListeners('player2-board');
+    }
+
+    updateGameStatusMessage(message) {
+        const gameStatusElement = document.getElementById('game-status');
+        gameStatusElement.textContent = message;
     }
 
     renderBoard(gameboard, playerBoardId) {
@@ -63,6 +68,7 @@ class DomController {
         });
 
         document.getElementById("start-btn").addEventListener("click", () => {
+            this.updateGameStatusMessage('');
             document.getElementById("player1-board").classList.remove("disabled");
             document.getElementById("player2-board").classList.remove("disabled");
             document.getElementById("player1-board").classList.add("started");
@@ -88,33 +94,16 @@ class DomController {
         });
     }
 
-      handleAttack(row, col) {
+    handleAttack(row, col) {
         const result = this.gameController.processAttack(row, col);
     
         if (result) {
             this.displayPlayerBoards();
-            // Check if the game has ended and display winner
-            if (result.gameEnded) {
-                this.displayWinner(this.gameController.winner);
-                document.getElementById("player1-board").classList.remove("started");
-                document.getElementById("player2-board").classList.remove("started");
-            }
         }
     }
-    updateGameStatus(message) {
-        const gameStatusElement = document.getElementById('game-status');
-        gameStatusElement.textContent = message;
-    }
 
-    displayWinner(winner) {
-        const gameStatusElement = document.getElementById('game-status');
+   
 
-        if (winner.type === 'real'){
-            gameStatusElement.textContent = `YOU WIN!`;
-        }else {
-            gameStatusElement.textContent = `COMPUTER WINS!`;
-        };
-    }
 }
 
 module.exports = DomController;

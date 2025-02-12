@@ -16,6 +16,7 @@ class GameController {
         this.populateBoards();
 
         this.computerController = new ComputerController(this);
+        this.gameEnded = false;
     }
 
     populateBoards() {
@@ -32,6 +33,7 @@ class GameController {
         this.player1.gameboard.clearBoard();
         this.player2.gameboard.clearBoard();
         this.populateBoards();
+        this.gameEnded = false;
     }
 
     processAttack(row, col) {
@@ -41,35 +43,32 @@ class GameController {
             console.log('A ship was sunk!');
         }
     
-        // Check if the opponent has lost all ships
+        // Ends game if all ships are sunk
         if (this.checkForWinner()) {
-            return { ...result, gameEnded: true }; 
+            this.gameEnded = true;
+        } else {
+            this.swapTurn();
         }
-    
-        this.swapTurn();
+
         return result;
     }
-    
+        
     checkForWinner() {
         if (this.opponent.gameboard.allShipsSunk()) {
-            this.declareWinner(this.currentPlayer);
             return true;
         }
         return false;
     }
 
-    declareWinner(winner) {
-        this.winner = winner;
-        this.gameEnded = true; 
-    }
-    
     swapTurn() {
         [this.currentPlayer, this.opponent] = [this.opponent, this.currentPlayer];
-
         if (this.currentPlayer.type === 'computer') {
-            console.log('Computer is making its move...');
             this.computerController.takeTurn(); 
         }
+        else {
+            console.log("Player's turn");
+        }
+
     }
 }
 
