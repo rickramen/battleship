@@ -9,6 +9,7 @@ function startGame() {
     const gameController = new GameController();
     const domController = new DomController(gameController);
 
+    gameController.domController = domController;
     domController.initialize();
 }
 

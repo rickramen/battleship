@@ -64,6 +64,7 @@ class DomController {
     setupButtonListeners() {
         document.getElementById("random-btn").addEventListener("click", () => {
             this.gameController.resetBoards(); 
+            this.updateGameStatusMessage('Press start to BATTLE!!!');
             this.displayPlayerBoards()
         });
 
@@ -94,15 +95,26 @@ class DomController {
         });
     }
 
-    handleAttack(row, col) {
-        const result = this.gameController.processAttack(row, col);
+    disableBoard() {
+        document.getElementById("player1-board").classList.add("disabled");
+        document.getElementById("player2-board").classList.add("disabled");
+    }
     
+    enableBoard() {
+        document.getElementById("player1-board").classList.remove("disabled");
+        document.getElementById("player2-board").classList.remove("disabled");
+    }
+    
+
+    handleAttack(row, col) {
+        const result = this.gameController.processAttack(row, col);    
         if (result) {
             this.displayPlayerBoards();
+            if (this.gameController.gameEnded) {
+                this.disableBoard();
+            }
         }
     }
-
-   
 
 }
 
