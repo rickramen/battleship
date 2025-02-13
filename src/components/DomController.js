@@ -105,18 +105,30 @@ class DomController {
         document.getElementById("player2-board").classList.remove("disabled");
     }
     
+    
+    handleGameEnd(winner) {
+        const message = `${winner} WINS!!!`;
+        this.updateGameStatusMessage(message);
+        this.disableBoard();
+    }
 
     handleAttack(row, col) {
+        const attacker = this.gameController.currentPlayer.type === 'real' ? 'Player' : 'Computer';
         const result = this.gameController.processAttack(row, col);    
+
         if (result) {
             this.displayPlayerBoards();
-            if (this.gameController.gameEnded) {
-                this.disableBoard();
+            
+             
+            if (result.gameEnded) {
+                const winner = this.gameController.currentPlayer.type === 'real' ? 'Player' : 'Computer';
+                this.handleGameEnd(winner);  
+            } else {
+                this.updateGameStatusMessage(`${attacker} attacked (${row}, ${col})`);
             }
         }
     }
-
-}
+ }
 
 module.exports = DomController;
 

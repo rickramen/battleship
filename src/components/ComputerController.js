@@ -8,10 +8,21 @@ class ComputerController {
     takeTurn() {
         if (this.gameController.gameEnded) return;
         const availableMoves = this.getAvailableMoves();
-
         const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        console.log(`Computer attacking: Row ${randomMove.row}, Column ${randomMove.col}`);
-        this.gameController.processAttack(randomMove.row, randomMove.col);
+        const result = this.gameController.processAttack(randomMove.row, randomMove.col);
+
+        if (result) {
+            this.gameController.domController.updateGameStatusMessage(
+                `Computer attacked (${randomMove.row}, ${randomMove.col})`
+            );
+        }
+
+        if (result.gameEnded) {
+            const winner = this.gameController.currentPlayer.type === 'real' ? 'Player' : 'Computer';
+            this.gameController.domController.handleGameEnd(winner); 
+        } else {
+            this.gameController.domController.enableBoard();
+        }
     }
 
     getAvailableMoves() {

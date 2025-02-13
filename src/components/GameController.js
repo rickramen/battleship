@@ -16,7 +16,6 @@ class GameController {
         this.populateBoards();
 
         this.computerController = new ComputerController(this);
-        this.gameEnded = false;
     }
 
     populateBoards() {
@@ -36,39 +35,21 @@ class GameController {
         this.gameEnded = false;
     }
 
-    processAttack(row, col) {
-        if (this.gameEnded) return; 
-    
+    processAttack(row, col) {    
         const result = this.opponent.gameboard.receiveAttack({ row, col });
     
-        if (result.sunk) {
-            console.log('A ship was sunk!');
-        }
-    
         // Ends game if all ships are sunk
-        if (this.checkForWinner()) {
-            this.gameEnded = true;
-            
-            const winnerMessage = this.currentPlayer.type === 'real' ? 'YOU WIN!' : 'COMPUTER WINS!';
-            this.domController.updateGameStatusMessage(winnerMessage);  
-    
-            return { ...result, gameEnded: true }; 
+        if (this.opponent.gameboard.allShipsSunk()) {
+            return { ...result, gameEnded: true, winner: this.currentPlayer.type === 'real' ? 'Player' : 'Computer' };
         }
-    
+        
         this.swapTurn();
         return result;
     }
     
-        
-    checkForWinner() {
-        if (this.opponent.gameboard.allShipsSunk()) {
-            return true;
-        }
-        return false;
-    }
-
     swapTurn() {
         [this.currentPlayer, this.opponent] = [this.opponent, this.currentPlayer];
+        
         if (this.currentPlayer.type === 'computer') {
             this.domController.disableBoard();
 
@@ -76,7 +57,7 @@ class GameController {
                 this.computerController.takeTurn(); 
                 this.domController.displayPlayerBoards();
                 this.domController.enableBoard();
-            }, 1000); // 1 second delay
+            }, 750); // .75 sec delay
         }
     }
 }
