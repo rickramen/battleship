@@ -1,5 +1,5 @@
 // index.js
-import './styles/styles.css';
+import './styles.css';
 
 
 const GameController = require('./components/GameController');
